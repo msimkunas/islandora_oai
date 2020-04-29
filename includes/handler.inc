@@ -64,6 +64,10 @@ EOQ;
       $qp->buildQuery(format_string('!field:"info:fedora/islandora:collectionCModel"', array(
         '!field' => variable_get('islandora_solr_content_model_field', 'RELS_EXT_hasModel_uri_ms'),
       )), $solr_params);
+      if (variable_get('islandora_oai_solr_remove_base_filters', FALSE)) {
+        // Remove any base search filters.
+        $qp->solrParams = islandora_solr_remove_base_filters($qp->solrParams);
+      }
       $qp->solrStart = $params['token']->deliveredrecords;
       $qp->executeQuery(FALSE);
       $total_records = $qp->islandoraSolrResult['response']['numFound'];
